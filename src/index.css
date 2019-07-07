@@ -1,0 +1,112 @@
+body {
+  font: 14px "Century Gothic", Futura, sans-serif;
+  margin: 20px;
+}
+
+ol, ul {
+  padding-left: 30px;
+}
+
+body{
+	background-image: linear-gradient( rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) ), url('./lightning-sky-storm-53459.jpg');
+	background-size: cover;
+}
+.board-row{
+  clear: both;
+  margin-top:70px;
+  position:relative;
+  display: block;
+  width:100%;
+  height:100%;
+  top:0;
+  left:0;
+  background-color: #fff;
+}
+.header {
+  clear:both;
+  width: 98%;
+  height: 50px;
+  color: #f00;
+  position: absolute;
+  display: block;
+  padding:10px;
+  opacity: 0.8;
+  margin-right: 0px;
+  top: 0;
+  left:0;
+  font-size: 30px;
+
+}
+
+.infoWeather {
+  background: #fff;
+  border: 1px solid #999;
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  height: 100%;
+  margin-right: 0px;
+  margin-top: 0px;
+  padding: 0;
+  text-align: center;
+  width: 1000px;
+  display:inline-block;
+  background-color: #fff;
+  position:absolute;
+  align:center;
+}
+
+.footer{
+	position:absolute;
+	bottom:0;
+	left:0;
+	color:#fff;
+	width:99%;
+	background-color:#000;
+	height:30px;
+	padding-left:10px;
+	
+}
+.body{
+	height:100%;
+}
+.curCity{
+	font-size: 50px;
+	position:relative;
+	display:inline-block;
+}
+.cur{
+	margin-top:10px;
+	color: #fff;
+	background-color: #000;
+}
+.curTemp{
+	position:relative;
+	display:inline-block;
+	margin-left:10px;
+	font-size:30px;
+}
+.curCond{
+	text-align:center;
+}
+.curRow{
+	margin-top:10px;
+	text-align:center;
+}
+.curMisc{
+	position:relative;
+	display:inline-block;
+	font-size:20px;
+	margin-left:10px;
+	margin-right:10px;
+}
+.curMax{
+	color:#f00;
+}
+.curMin{
+	color:#070;
+}
+.imgIcon{
+	vertical-align:middle;
+}
