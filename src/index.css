@@ -8,8 +8,9 @@ ol, ul {
 }
 
 body{
-	background-image: linear-gradient( rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) ), url('./lightning-sky-storm-53459.jpg');
-	background-size: cover;
+	background-image: linear-gradient( rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) ), url('./atmosphere-blue-blue-sky-314726.jpg');
+	background-repeat: no repeat;
+	background-size:1920px;
 }
 .board-row{
   clear: both;
@@ -20,7 +21,7 @@ body{
   height:100%;
   top:0;
   left:0;
-  background-color: #fff;
+  text-align:center;
 }
 .header {
   clear:both;
@@ -39,9 +40,7 @@ body{
 }
 
 .infoWeather {
-  background: #fff;
   border: 1px solid #999;
-  float: left;
   font-size: 24px;
   font-weight: bold;
   line-height: 34px;
@@ -52,11 +51,21 @@ body{
   text-align: center;
   width: 1000px;
   display:inline-block;
-  background-color: #fff;
-  position:absolute;
-  align:center;
+  background-image: linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7) );
+  float:center;
+  padding-bottom:10px;
 }
+@media only screen and (max-width:1200px){
+	.infoWeather{
+		width:500px;
+	}
 
+}
+@media only screen and (max-width:720px){
+	.infoWeather{
+		width:600px;
+	}
+}
 .footer{
 	position:absolute;
 	bottom:0;
@@ -73,13 +82,13 @@ body{
 }
 .curCity{
 	font-size: 50px;
-	position:relative;
-	display:inline-block;
 }
 .cur{
 	margin-top:10px;
+	margin-left:10px;
 	color: #fff;
-	background-color: #000;
+	display:inline-block;
+	position:relative;
 }
 .curTemp{
 	position:relative;
@@ -88,6 +97,7 @@ body{
 	font-size:30px;
 }
 .curCond{
+	margin-left: 10px;
 	text-align:center;
 }
 .curRow{
@@ -95,11 +105,10 @@ body{
 	text-align:center;
 }
 .curMisc{
-	position:relative;
-	display:inline-block;
-	font-size:20px;
-	margin-left:10px;
+	font-size:12px;
 	margin-right:10px;
+	line-height: 17px;
+	width:90px;
 }
 .curMax{
 	color:#f00;
