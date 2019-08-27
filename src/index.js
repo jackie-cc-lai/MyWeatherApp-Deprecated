@@ -8,30 +8,55 @@ const apiURL = "http://api.openweathermap.org/data/2.5/weather?id=6167865&APPID=
 const apiURL2 = "http://api.openweathermap.org/data/2.5/forecast?id=6167865&APPID=" + apiKey + "&units=metric"; //hardcoded city for now because I'm not looking at search function yet
 //End global attributes
 
+function WindDir(deg){
+	if(deg >= 5 && deg < 40){
+		return "NNE";
+	}else if (deg >= 40 && deg < 50){
+		return "NE";
+	}else if (deg >= 50 && deg < 85){
+		return "NEE";
+	}else if (deg >= 85 && deg < 95){
+		return "E";
+	}else if (deg >= 95 && deg < 130){
+		return "ESE";
+	}else if (deg >= 130 && deg < 140){
+		return "SE";
+	}else if (deg >= 140 && deg < 175){
+		return "SSE";
+	}else if (deg >= 175 && deg < 185){
+		return "S";
+	}else if (deg >= 185 && deg < 220){
+		return "SSW";
+	}else if (deg >= 220 && deg < 230){
+		return "SW";
+	}else if (deg >= 230 && deg < 270){
+		return "WSW";
+	}else if (deg >= 270 && deg < 280){
+		return "W";
+	}else if (deg >= 280 && deg < 315){
+		return "WNW";
+	}else if (deg >= 315 && deg < 325){
+		return "NW";
+	}else if (deg >= 325 && deg < 355){
+		return "NNW";
+	}else return "N";
+	
+}
+
 function parseInfo(fInfo){ //I'll use this to parse future forecast into something that can be easily displayed
-	var returnData = new Array(20); //Make new array to parse stuff into, cycle goes: date, min temp, max temp, condition at midday
+	var returnData = new Array(20); //Make new array to parse stuff into, cycle goes: date, min temp, max temp, condition at midday, wind
 	var i = 1;
 	//Day 1
 	returnData[0] = fInfo.list[0].dt_txt.split(" ")[0];
 	returnData[1] = fInfo.list[0].main.temp_min;
+	returnData[2] = fInfo.list[0].main.temp_max;
 	while(fInfo.list[i].dt_txt.split(" ")[0] === fInfo.list[0].dt_txt.split(" ")[0]){ //Search for same day
 		if(returnData[1] > fInfo.list[i].main.temp_min){
 			returnData[1] = fInfo.list[i].main.temp_min; //If current recorded min temp > forecasted temp in the next block of data for the same day replace
 		}
-		
-		i++;
-	}
-	var k = i;
-	returnData[2] = fInfo.list[0].main.temp_max;
-	i = 1;
-	while(fInfo.list[i].dt_txt.split(" ")[0] === fInfo.list[0].dt_txt.split(" ")[0]){ //Search for same day
 		if(returnData[2] < fInfo.list[i].main.temp_max){
 			returnData[2] = fInfo.list[i].main.temp_max; //If current recorded max temp < forecasted temp in the next block of data for the same day replace
 		}
-		i++;
-	}
-	i = 1;
-	while(fInfo.list[i].dt_txt.split(" ")[0] === fInfo.list[0].dt_txt.split(" ")[0]){ //Search for same day
 		if(fInfo.list[i].dt_txt.split(" ")[1] === "12:00:00"){ //condition at noon
 			returnData[3] = fInfo.list[i].weather[0].main;
 		}
@@ -40,84 +65,67 @@ function parseInfo(fInfo){ //I'll use this to parse future forecast into somethi
 				returnData[3] += "/" + fInfo.list[i].weather[0].main;
 			}
 		}
-		i++;
-	}
-	//Day 2
-	i = k+1;
-	returnData[4] = fInfo.list[k].dt_txt.split(" ")[0];
-	returnData[5] = fInfo.list[k].main.temp_min;
-	while(fInfo.list[i].dt_txt.split(" ")[0] === fInfo.list[k].dt_txt.split(" ")[0]){ //Search for same day
-		if(returnData[5] > fInfo.list[i].main.temp_min){
-			returnData[5] = fInfo.list[i].main.temp_min; //If current recorded min temp > forecasted temp in the next block of data for the same day replace
+		if(fInfo.list[i].dt_txt.split(" ")[1] === "12:00:00"){ //condition at noon
+			returnData[4] = fInfo.list[i].wind.speed;
+			returnData[5] = WindDir(fInfo.list[i].wind.deg);
 		}
 		
 		i++;
 	}
-	returnData[6] = fInfo.list[k].main.temp_max;
-	console.log(returnData[6]);
+	var k = i;
+	//Day 2
 	i = k+1;
+	returnData[6] = fInfo.list[k].dt_txt.split(" ")[0];
+	returnData[7] = fInfo.list[k].main.temp_min;
+	returnData[8] = fInfo.list[k].main.temp_max;
 	while(fInfo.list[i].dt_txt.split(" ")[0] === fInfo.list[k].dt_txt.split(" ")[0]){ //Search for same day
-		if(returnData[6] < fInfo.list[i].main.temp_max){
-			returnData[6] = fInfo.list[i].main.temp_max; //If current recorded max temp < forecasted temp in the next block of data for the same day replace
+		if(returnData[7] > fInfo.list[i].main.temp_min){
+			returnData[7] = fInfo.list[i].main.temp_min; //If current recorded min temp > forecasted temp in the next block of data for the same day replace
 		}
-		i++;
-	}
-	i = k+1;
-	while(fInfo.list[i].dt_txt.split(" ")[0] === fInfo.list[k].dt_txt.split(" ")[0]){ //Search for same day
+		if(returnData[8] < fInfo.list[i].main.temp_max){
+			returnData[8] = fInfo.list[i].main.temp_max; //If current recorded max temp < forecasted temp in the next block of data for the same day replace
+		}
 		if(fInfo.list[i].dt_txt.split(" ")[1] === "12:00:00"){ //condition at noon
-			returnData[7] = fInfo.list[i].weather[0].main;
+			returnData[9] = fInfo.list[i].weather[0].main;
 		}
 		if(fInfo.list[i].dt_txt.split(" ")[1] === "15:00:00"){ //condition at noon
-			if(returnData[7] != fInfo.list[i].weather[0].main){
-				returnData[7] += "/" + fInfo.list[i].weather[0].main;
+			if(returnData[9] != fInfo.list[i].weather[0].main){
+				returnData[9] += "/" + fInfo.list[i].weather[0].main;
 			}
+		}
+		if(fInfo.list[i].dt_txt.split(" ")[1] === "12:00:00"){ //condition at noon
+			returnData[10] = fInfo.list[i].wind.speed;
+			returnData[11] = WindDir(fInfo.list[i].wind.deg);
 		}
 		i++;
 	}
 	k=i;
 	//Day 3
 	i = k+1;
-	returnData[8] = fInfo.list[k].dt_txt.split(" ")[0];
-	returnData[9] = fInfo.list[k].main.temp_min;
+	returnData[12] = fInfo.list[k].dt_txt.split(" ")[0];
+	returnData[13] = fInfo.list[k].main.temp_min;
+	returnData[14] = fInfo.list[k].main.temp_max;
 	while(fInfo.list[i].dt_txt.split(" ")[0] === fInfo.list[k].dt_txt.split(" ")[0]){ //Search for same day
-		if(returnData[9] > fInfo.list[i].main.temp_min){
-			returnData[9] = fInfo.list[i].main.temp_min; //If current recorded min temp > forecasted temp in the next block of data for the same day replace
+		if(returnData[13] > fInfo.list[i].main.temp_min){
+			returnData[13] = fInfo.list[i].main.temp_min; //If current recorded min temp > forecasted temp in the next block of data for the same day replace
 		}
-		
-		i++;
-	}
-	returnData[10] = fInfo.list[k].main.temp_max;
-	console.log(returnData[10]);
-	i = k+1;
-	while(fInfo.list[i].dt_txt.split(" ")[0] === fInfo.list[k].dt_txt.split(" ")[0]){ //Search for same day
-		if(returnData[10] < fInfo.list[i].main.temp_max){
-			returnData[10] = fInfo.list[i].main.temp_max; //If current recorded max temp < forecasted temp in the next block of data for the same day replace
+		if(returnData[14] < fInfo.list[i].main.temp_max){
+			returnData[14] = fInfo.list[i].main.temp_max; //If current recorded max temp < forecasted temp in the next block of data for the same day replace
 		}
-		i++;
-	}
-	i = k+1;
-	while(fInfo.list[i].dt_txt.split(" ")[0] === fInfo.list[k].dt_txt.split(" ")[0]){ //Search for same day
 		if(fInfo.list[i].dt_txt.split(" ")[1] === "12:00:00"){ //condition at noon
-			returnData[11] = fInfo.list[i].weather[0].main;
+			returnData[15] = fInfo.list[i].weather[0].main;
 		}
 		if(fInfo.list[i].dt_txt.split(" ")[1] === "15:00:00"){ //condition at noon
-			if(returnData[11] != fInfo.list[i].weather[0].main){
-				returnData[11] += "/" + fInfo.list[i].weather[0].main;
+			if(returnData[15] != fInfo.list[i].weather[0].main){
+				returnData[15] += "/" + fInfo.list[i].weather[0].main;
 			}
+		}
+		if(fInfo.list[i].dt_txt.split(" ")[1] === "12:00:00"){ //condition at noon
+			returnData[16] = fInfo.list[i].wind.speed;
+			returnData[17] = WindDir(fInfo.list[i].wind.deg);
 		}
 		i++;
 	}
-	k=i;
-	//Day 4
-	i = k+1;
-	returnData[12] = fInfo.list[k].dt_txt.split(" ")[0];
-	/*returnData[13] = 
-	returnData[14] = 
-	returnData[15] = 
-	returnData[16] = fInfo.list[32].dt_txt.split(" ")[0];
-	returnData[17] = 
-	returnData[18] = 
-	returnData[19] = */
 
 	return returnData;
 }
@@ -138,17 +146,22 @@ class InfoWeather extends React.Component {
 			fInfo: null
 		}
 	}
+	handleClick(i){
+		
+	}
 	generateFutureForecast(i){
 		const {error, isLoaded, cInfo, fInfo} = this.state;
 		if(this.state.cInfo === null){
 			return null
 		}else{
 			return(
-			<div className="curRow">
+			<div className="curRow" onClick =>{this.handleClick(i)}>
 				<div className="curMisc cur">{fInfo[i]}</div>
 				<div className="curMin curMisc cur">{fInfo[i+1]}</div>
 				<div className="curMax curMisc cur">{fInfo[i+2]}</div>
 				<div className="curMisc cur">{fInfo[i+3]}</div>
+				<div className="curMisc cur">{fInfo[i+4]}</div>
+				<div className="curMisc cur">{fInfo[i+5]}</div>
 			</div>
 			);
 		}
@@ -176,8 +189,6 @@ class InfoWeather extends React.Component {
 		  )
 	}
 	render() {
-	  console.log(this.state.cInfo);
-	  console.log(this.state.fInfo);
 	  const {error, isLoaded, cInfo, fInfo} = this.state;
 	 if(this.state.cInfo === null){
 		 return <div className="infoWeather"></div>
@@ -200,8 +211,8 @@ class InfoWeather extends React.Component {
 			</div>
 		</div>
 		{this.generateFutureForecast(0)}
-		{this.generateFutureForecast(4)}
-		{this.generateFutureForecast(8)}
+		{this.generateFutureForecast(6)}
+		{this.generateFutureForecast(12)}
 	    
         
       </div>
