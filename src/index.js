@@ -3,9 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 //Global attributes
-const apiKey = ""; //Remove before committing and pushing
-const apiURL = "http://api.openweathermap.org/data/2.5/weather?id=6167865&APPID=" + apiKey + "&units=metric"; //hardcoded city for now because I'm not looking at search function yet
-const apiURL2 = "http://api.openweathermap.org/data/2.5/forecast?id=6167865&APPID=" + apiKey + "&units=metric"; //hardcoded city for now because I'm not looking at search function yet
+var apiKey = "&APPID=INSERT_API_KEY_HERE&units=metric"; //Insert API Key before running npm start/npm build
+var city_Toronto = "6167865"; //city ID of Toronto
+var city_Markham = "6066513";
+var city_Taipei = "1668341";
+var apiURL = "http://api.openweathermap.org/data/2.5/weather?id="; 
+var apiURL2 = "http://api.openweathermap.org/data/2.5/forecast?id=";
+
 //End global attributes
 
 function WindDir(deg){
@@ -130,12 +134,6 @@ function parseInfo(fInfo){ //I'll use this to parse future forecast into somethi
 	return returnData;
 }
 
-class Timer extends React.Component{ //The API has a 10 minute recommendation so we set this up to avoid asking too many times
-	constructor(props){
-		super(props);
-	}
-}
-
 class InfoWeather extends React.Component {
 	constructor(props){
 		super(props);
@@ -143,11 +141,9 @@ class InfoWeather extends React.Component {
 			error:null,
 			isLoaded:false,
 			cInfo: null,
-			fInfo: null
+			fInfo: null,
+			data: this.props.data,
 		}
-	}
-	handleClick(i){
-		
 	}
 	generateFutureForecast(i){
 		const {error, isLoaded, cInfo, fInfo} = this.state;
@@ -155,7 +151,7 @@ class InfoWeather extends React.Component {
 			return null
 		}else{
 			return(
-			<div className="curRow" onClick =>{this.handleClick(i)}>
+			<div className="curRow">
 				<div className="curMisc cur">{fInfo[i]}</div>
 				<div className="curMin curMisc cur">{fInfo[i+1]}</div>
 				<div className="curMax curMisc cur">{fInfo[i+2]}</div>
@@ -166,15 +162,38 @@ class InfoWeather extends React.Component {
 			);
 		}
 	}
-	componentDidMount(){
+	componentWillReceiveProps(nextProps) {
+		this.setState({ data: nextProps.data });  
+		console.log(this.state.data);
 		Promise.all([
-		fetch(apiURL), fetch(apiURL2)
+		fetch(this.props.URL1), fetch(this.props.URL2)
 		]).then(([res1, res2]) => { 
 			return Promise.all([res1.json(), res2.json()]) 
 		}).then(
 			([result1, result2]) => {
 			  var fparse = parseInfo(result2);
-			  console.log(fparse);
+			  this.setState({
+				isLoaded: true,
+				cInfo: result1,
+				fInfo: fparse
+			  });
+			},(error) => {
+			  this.setState({
+				isLoaded: true,
+				error
+			  });
+			}
+		  )
+	}
+	componentDidMount(){
+		
+		Promise.all([
+		fetch(this.props.URL1), fetch(this.props.URL2)
+		]).then(([res1, res2]) => { 
+			return Promise.all([res1.json(), res2.json()]) 
+		}).then(
+			([result1, result2]) => {
+			  var fparse = parseInfo(result2);
 			  this.setState({
 				isLoaded: true,
 				cInfo: result1,
@@ -196,7 +215,7 @@ class InfoWeather extends React.Component {
     return (
       <div className="infoWeather">
 		<div className="curRow">
-			<div className="curCity cur">{cInfo.name}: </div>
+			<div className="curCity cur">{this.props.data}: </div>
 			<div className="curTemp cur"> {cInfo.main.temp} &deg; C </div>
 			<div className="curCond cur"><img src={`http://openweathermap.org/img/wn/${cInfo.weather[0].icon}@2x.png`} className="imgIcon"/></div>	
 		</div>
@@ -220,6 +239,12 @@ class InfoWeather extends React.Component {
 	 }
   }
 }
+function InfoCity(props){
+		return(
+			<button className="buttonCity" onClick={() => props.onClick()}>{props.value}</button>
+		);
+
+}
 class MakeTop extends React.Component {
 	constructor(props){
 		super(props);
@@ -233,12 +258,10 @@ class MakeTop extends React.Component {
 	}
 	handleSubmit(event) {
 		event.preventDefault();
-		var CityList = findCity(this.state.value);
 		alert('A name was submitted: ' + this.state.value);	
 
     }
-	componentDidMount(){
-	}
+
 	render() {
 		return (
 			<div className="header">
@@ -256,11 +279,41 @@ class MakeTop extends React.Component {
 class Interface extends React.Component {
 	constructor(props){ //Eventually I'll need this to pass city information to InfoWeather
 		super(props);
+		this.state={URL1: apiURL + city_Toronto + apiKey,
+					URL2: apiURL2 + city_Toronto + apiKey,
+					data: "Toronto",
+		}; //Default is Toronto
 		
 	}
-	
+	handleClick(i){
+		console.log(i);
+		var newURL1, newURL2;
+		if(i == "Toronto"){
+			newURL1 = apiURL + city_Toronto + apiKey;
+			newURL2 = apiURL2 + city_Toronto + apiKey;
+			console.log(newURL1);
+		}else if (i == "Markham"){
+			newURL1 = apiURL + city_Markham + apiKey;
+			newURL2 = apiURL2 + city_Markham + apiKey;
+			console.log(newURL1);
+		}else if (i == "Taipei"){
+			newURL1 = apiURL + city_Taipei + apiKey;
+			newURL2 = apiURL2 + city_Taipei + apiKey;
+			console.log(newURL1);
+		}
+		this.setState({
+			data: i,
+			URL1: newURL1,
+			URL2: newURL2,
+		});
+		//console.log(this.state);
+		console.log(newURL1);
+	}
+  renderCity(i){
+	  return <InfoCity value={i} onClick={()=>this.handleClick(i)} />;
+  }
   renderWeather() {
-    return <InfoWeather />;
+    return <InfoWeather URL1 = {this.state.URL1} URL2 = {this.state.URL2} data={this.state.data}/>;
   }
   renderDiv(){
 	return <MakeTop />;
@@ -273,6 +326,9 @@ class Interface extends React.Component {
 	  {this.renderDiv()}
         <div className="board-row">
           {this.renderWeather()}
+		  {this.renderCity("Toronto")}
+		  {this.renderCity("Markham")}
+		  {this.renderCity("Taipei")}
 		</div>
 	  <div className="footer">
 		<p>Image courtesy of Pexels.</p>
@@ -290,15 +346,3 @@ ReactDOM.render(
   <Interface />,
   document.getElementById('root')
 );
-
-function findCity(cityName){ /* Returns a list of potential cities based on city name */
-	 var xCity = require('./city.list.json');
-	 /*xCity.onreadtstatechange = function(){
-		 if(this.readyState == 4 && this.status ==200){
-			 
-		 }
-	 }
-	 xCity.open("GET","./city.list.json", true);
-	 xCity.send();
-	 return JSON.parse(xCity.responseText);*/
-}
