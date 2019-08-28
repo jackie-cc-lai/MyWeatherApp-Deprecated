@@ -1,3 +1,5 @@
+Note: API Key to facilitate the GET requests are removed prior to commits
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
