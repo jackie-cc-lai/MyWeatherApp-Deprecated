@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 //Global attributes
-var apiKey = "&APPID=74e448a3e285f498bbcdf9ad0c7ecaff&units=metric"; //Insert API Key before running npm start/npm build
+var apiKey = "&APPID=INSERT_API_KEY&units=metric"; //Insert API Key before running npm start/npm build
 var city_Toronto = "6167865"; //city ID of Toronto
 var city_Markham = "6066513";
 var city_Taipei = "1668341";
