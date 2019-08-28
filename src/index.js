@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 //Global attributes
-var apiKey = "&APPID=INSERT_API_KEY_HERE&units=metric"; //Insert API Key before running npm start/npm build
+var apiKey = "&APPID=74e448a3e285f498bbcdf9ad0c7ecaff&units=metric"; //Insert API Key before running npm start/npm build
 var city_Toronto = "6167865"; //city ID of Toronto
 var city_Markham = "6066513";
 var city_Taipei = "1668341";
@@ -163,10 +163,10 @@ class InfoWeather extends React.Component {
 		}
 	}
 	componentWillReceiveProps(nextProps) {
-		this.setState({ data: nextProps.data });  
-		console.log(this.state.data);
+		this.setState({ data: nextProps.data,});  
+
 		Promise.all([
-		fetch(this.props.URL1), fetch(this.props.URL2)
+		fetch(nextProps.URL1), fetch(nextProps.URL2)
 		]).then(([res1, res2]) => { 
 			return Promise.all([res1.json(), res2.json()]) 
 		}).then(
@@ -215,7 +215,7 @@ class InfoWeather extends React.Component {
     return (
       <div className="infoWeather">
 		<div className="curRow">
-			<div className="curCity cur">{this.props.data}: </div>
+			<div className="curCity cur">{cInfo.name}: </div>
 			<div className="curTemp cur"> {cInfo.main.temp} &deg; C </div>
 			<div className="curCond cur"><img src={`http://openweathermap.org/img/wn/${cInfo.weather[0].icon}@2x.png`} className="imgIcon"/></div>	
 		</div>
@@ -306,7 +306,6 @@ class Interface extends React.Component {
 			URL1: newURL1,
 			URL2: newURL2,
 		});
-		//console.log(this.state);
 		console.log(newURL1);
 	}
   renderCity(i){
