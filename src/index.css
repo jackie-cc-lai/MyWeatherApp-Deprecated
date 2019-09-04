@@ -55,15 +55,43 @@ body{
   float:center;
   padding-bottom:10px;
 }
+
+.buttonCity{
+	color:#fff;
+	border-radius: 5px;
+	border-width: 2px;
+	background-color: #555;
+	height: 50px;
+	width: 150px;
+}
+
+.curMisc{
+	font-size:15px;
+	margin-right:10px;
+	line-height: 17px;
+	width:90px;
+}
 @media only screen and (max-width:1200px){
 	.infoWeather{
-		width:500px;
+		width:700px;
 	}
 
 }
 @media only screen and (max-width:720px){
 	.infoWeather{
 		width:600px;
+	}
+	
+	.buttonCity{
+		height: 100px;
+		width: 400px;
+		font-size: 30px;
+	}
+	.curMisc{
+		font-size:20px;
+		margin-right:10px;
+		line-height: 30px;
+		width:120px;
 	}
 }
 .footer{
@@ -104,12 +132,7 @@ body{
 	margin-top:10px;
 	text-align:center;
 }
-.curMisc{
-	font-size:12px;
-	margin-right:10px;
-	line-height: 17px;
-	width:90px;
-}
+
 .curMax{
 	color:#f00;
 }
@@ -120,6 +143,3 @@ body{
 	vertical-align:middle;
 }
 
-.buttonCity{
-	color:#070;
-}

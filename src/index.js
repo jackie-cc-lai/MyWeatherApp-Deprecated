@@ -243,7 +243,6 @@ function InfoCity(props){
 		return(
 			<button className="buttonCity" onClick={() => props.onClick()}>{props.value}</button>
 		);
-
 }
 class MakeTop extends React.Component {
 	constructor(props){
@@ -325,9 +324,11 @@ class Interface extends React.Component {
 	  {this.renderDiv()}
         <div className="board-row">
           {this.renderWeather()}
+		  <div className="curRow">
 		  {this.renderCity("Toronto")}
 		  {this.renderCity("Markham")}
 		  {this.renderCity("Taipei")}
+		  </div>
 		</div>
 	  <div className="footer">
 		<p>Image courtesy of Pexels.</p>
