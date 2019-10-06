@@ -7,7 +7,7 @@ var apiKey = "&APPID=INSERT_API_KEY&units=metric"; //Insert API Key before runni
 var city_Toronto = "6167865"; //city ID of Toronto
 var city_Markham = "6066513";
 var city_Taipei = "1668341";
-var apiURL = "http://api.openweathermap.org/data/2.5/weather?id="; 
+var apiURL = "http://127.0.0.1:8000/WeatherApp/"; 
 var apiURL2 = "http://api.openweathermap.org/data/2.5/forecast?id=";
 
 //End global attributes
@@ -212,21 +212,20 @@ class InfoWeather extends React.Component {
 	 if(this.state.cInfo === null){
 		 return <div className="infoWeather"></div>
 	 }else{
+		 console.log(cInfo);
+		 var Direc = WindDir(cInfo.degree);
     return (
       <div className="infoWeather">
 		<div className="curRow">
 			<div className="curCity cur">{cInfo.name}: </div>
-			<div className="curTemp cur"> {cInfo.main.temp} &deg; C </div>
-			<div className="curCond cur"><img src={`http://openweathermap.org/img/wn/${cInfo.weather[0].icon}@2x.png`} className="imgIcon"/></div>	
+			<div className="curTemp cur"> {cInfo.temp} &deg; C </div>
+			<div className="curCond cur"><img src={`http://openweathermap.org/img/wn/${cInfo.icon}@2x.png`} className="imgIcon"/></div>	
 		</div>
 		<div className="curRow">
 			<div className="cur">
-				<div className="curMax curMisc"> Max<br/> {cInfo.main.temp_max} &deg; C </div>
-				<div className="curMin curMisc"> Min<br/> {cInfo.main.temp_min} &deg; C </div>
-			</div>
-			<div className="cur">
-				<div className="curMisc"> Humidity <br/> {cInfo.main.humidity} % </div>
-				<div className="curMisc"> Wind <br/> {cInfo.wind.speed} kph </div>
+				<div className="curMax curMisc cur"> Max<br/> {cInfo.temp_max} &deg; C </div>
+				<div className="curMin curMisc cur"> Min<br/> {cInfo.temp_min} &deg; C </div>
+				<div className="curMisc cur"> Wind <br/> {cInfo.speed} kph {Direc} </div>
 			</div>
 		</div>
 		{this.generateFutureForecast(0)}
@@ -278,7 +277,7 @@ class MakeTop extends React.Component {
 class Interface extends React.Component {
 	constructor(props){ //Eventually I'll need this to pass city information to InfoWeather
 		super(props);
-		this.state={URL1: apiURL + city_Toronto + apiKey,
+		this.state={URL1: apiURL + city_Toronto,
 					URL2: apiURL2 + city_Toronto + apiKey,
 					data: "Toronto",
 		}; //Default is Toronto
@@ -288,15 +287,15 @@ class Interface extends React.Component {
 		console.log(i);
 		var newURL1, newURL2;
 		if(i == "Toronto"){
-			newURL1 = apiURL + city_Toronto + apiKey;
+			newURL1 = apiURL + city_Toronto;
 			newURL2 = apiURL2 + city_Toronto + apiKey;
 			console.log(newURL1);
 		}else if (i == "Markham"){
-			newURL1 = apiURL + city_Markham + apiKey;
+			newURL1 = apiURL + city_Markham;
 			newURL2 = apiURL2 + city_Markham + apiKey;
 			console.log(newURL1);
 		}else if (i == "Taipei"){
-			newURL1 = apiURL + city_Taipei + apiKey;
+			newURL1 = apiURL + city_Taipei;
 			newURL2 = apiURL2 + city_Taipei + apiKey;
 			console.log(newURL1);
 		}

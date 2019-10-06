@@ -109,7 +109,7 @@ body{
 	height:100%;
 }
 .curCity{
-	font-size: 50px;
+	font-size: 30px;
 }
 .cur{
 	margin-top:10px;
@@ -122,7 +122,7 @@ body{
 	position:relative;
 	display:inline-block;
 	margin-left:10px;
-	font-size:30px;
+	font-size:50px;
 }
 .curCond{
 	margin-left: 10px;
