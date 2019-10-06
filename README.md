@@ -2,6 +2,14 @@ Note: API Key to facilitate the GET requests are removed prior to commits
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Django Server
+
+The repository includes the Django backend that now facilitates the current weather API requests. Go to server\MyWeatherApp, go into env\Scripts and use activate.bat, then go into server\MyWeatherApp\MyWeatherApp and run
+
+### `python manage.py runserver`
+
+Runs the server that interfaces with the react app
+
 ## Available Scripts
 
 In the project directory, you can run:
