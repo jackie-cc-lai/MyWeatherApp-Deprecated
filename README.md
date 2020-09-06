@@ -1,3 +1,5 @@
+## DEPRECATED - A NEW VERSION IS BEING REBUILT
+
 Note: API Key to facilitate the GET requests are removed prior to commits
 
 The app searches up current and future weather forecasts using API calls from openweathermap.org. The requests are serviced through a django server to prevent overcalling the API (by storing the information and only calling updates if the information is outdated by an hour). The backend django server services the front end react application through the use of Django REST framework and the React application dynamically changes its display depending on which city is selected.
